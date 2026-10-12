@@ -1,7 +1,7 @@
 {
-  "name": "clickbank-affiliate-niche-site",
+  "name": "smart-buyer-guides",
   "version": "1.0.0",
-  "description": "High-performance, SEO-optimized ClickBank Affiliate Niche Site for the US market",
+  "description": "High-performance, SEO-optimized Multi-Niche Buying Guides for the US market",
   "type": "module",
   "scripts": {
     "dev": "astro dev",

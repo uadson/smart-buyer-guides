@@ -5,4 +5,4 @@ Allow: /
 Disallow: /go/
 
 # Sitemap gerado pelo Astro
-Sitemap: https://uadson.github.io/clickbank-affiliate-niche-site/sitemap-index.xml
+Sitemap: https://uadson.github.io/smart-buyer-guides/sitemap-index.xml
