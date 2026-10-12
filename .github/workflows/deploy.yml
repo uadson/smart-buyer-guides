@@ -39,6 +39,8 @@ jobs:
           BASE_PATH: /smart-buyer-guides
           SITE_URL: https://uadson.github.io
           PUBLIC_CLICKBANK_AFFILIATE_ID: ${{ vars.PUBLIC_CLICKBANK_AFFILIATE_ID || 'squadflier' }}
+          PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
+          PUBLIC_PINTEREST_DOMAIN_VERIFY: ${{ vars.PUBLIC_PINTEREST_DOMAIN_VERIFY }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
