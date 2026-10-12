@@ -1,0 +1,80 @@
+---
+/**
+ * Rota de Redirecionamento Amigável (Pretty Link / Masking) para Ofertas ClickBank.
+ *
+ * Gera páginas de redirecionamento 0s com meta-refresh e JavaScript para vendors conhecidos,
+ * mantendo conformidade com noindex/nofollow para motores de busca e preservando parâmetros TID.
+ */
+import { getCollection } from 'astro:content';
+import { buildClickbankUrl } from '../../utils/affiliate';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  const vendors = new Set<string>();
+
+  // Vendors padrão conhecidos
+  vendors.add('bt4dogs');
+  vendors.add('tedwood');
+
+  articles.forEach((article) => {
+    if (article.data.topPickVendor) {
+      vendors.add(article.data.topPickVendor.toLowerCase());
+    }
+  });
+
+  return Array.from(vendors).map((vendor) => ({
+    params: { vendor },
+    props: { vendor },
+  }));
+}
+
+const { vendor } = Astro.props;
+const defaultTarget = buildClickbankUrl(vendor, { tid: 'pretty_link' });
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting to Official Verified Partner...</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="refresh" content={`0;url=${defaultTarget}`} />
+    <script is:inline define:vars={{ defaultTarget }}>
+      (function() {
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const tid = urlParams.get('tid');
+          let redirectUrl = defaultTarget;
+          if (tid) {
+            const urlObj = new URL(defaultTarget);
+            urlObj.searchParams.set('tid', tid);
+            redirectUrl = urlObj.toString();
+          }
+          window.location.replace(redirectUrl);
+        } catch (e) {
+          window.location.replace(defaultTarget);
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center font-sans antialiased">
+    <div class="max-w-md w-full mx-4 p-8 rounded-3xl bg-slate-900 border border-slate-800 text-center shadow-2xl">
+      <div class="w-12 h-12 mx-auto mb-4 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black animate-pulse">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </div>
+      <h1 class="text-lg font-bold text-white mb-2">Redirecting to Official Offer</h1>
+      <p class="text-xs text-slate-400 mb-6">
+        Taking you securely to the official merchant presentation and 60-day guarantee checkout...
+      </p>
+      <a 
+        href={defaultTarget}
+        class="inline-block px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors"
+      >
+        Click here if not redirected automatically
+      </a>
+    </div>
+  </body>
+</html>

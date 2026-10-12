@@ -11,6 +11,8 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   schema?: Record<string, unknown> | Record<string, unknown>[];
+  googleSiteVerification?: string;
+  pinterestDomainVerify?: string;
 }
 
 const {
@@ -20,6 +22,8 @@ const {
   ogImage = '/images/og-default.jpg',
   ogType = 'website',
   schema,
+  googleSiteVerification = (typeof process !== 'undefined' && process.env?.PUBLIC_GOOGLE_SITE_VERIFICATION) || undefined,
+  pinterestDomainVerify = (typeof process !== 'undefined' && process.env?.PUBLIC_PINTEREST_DOMAIN_VERIFY) || undefined,
 } = Astro.props;
 
 const siteTitle = title.includes('|') ? title : `${title} | Paw & Mind Guides`;
@@ -32,6 +36,14 @@ const resolvedOgImage = new URL(ogImage, Astro.site || Astro.url.origin).href;
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="canonical" href={canonicalUrl} />
 <meta name="robots" content="index, follow" />
+
+<!-- Verificações de Domínio (Google Search Console & Pinterest) -->
+{googleSiteVerification && (
+  <meta name="google-site-verification" content={googleSiteVerification} />
+)}
+{pinterestDomainVerify && (
+  <meta name="p:domain_verify" content={pinterestDomainVerify} />
+)}
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={ogType} />

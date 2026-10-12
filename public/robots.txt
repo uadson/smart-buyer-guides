@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Bloqueio de rotas técnicas/rastreamento interno se aplicável
+Disallow: /go/
+
+# Sitemap gerado pelo Astro
+Sitemap: https://uadson.github.io/clickbank-affiliate-niche-site/sitemap-index.xml
