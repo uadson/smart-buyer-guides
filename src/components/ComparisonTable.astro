@@ -16,7 +16,7 @@ export interface ComparisonProduct {
   badge?: string;
   rating?: number;
   image: string;
-  vendor: string;
+  vendor?: string;
   highlight: string;
   guaranteeDays?: number;
   affiliate?: string;
@@ -65,27 +65,39 @@ const relAttr = getAffiliateRel();
       </thead>
       <tbody class="divide-y divide-slate-100">
         {products.map((item) => {
-          const url = buildClickbankUrl(item.vendor, {
+          const url = item.vendor ? buildClickbankUrl(item.vendor, {
             affiliate: item.affiliate,
             tid: item.tid || 'comparison_table',
-          });
+          }) : null;
           return (
             <tr class="hover:bg-emerald-50/20 transition-colors">
               <td class="py-4 px-4 sm:px-6">
-                <a 
-                  href={url} 
-                  target="_blank" 
-                  rel={relAttr}
-                  class="flex items-center gap-3.5 font-bold text-slate-900 hover:text-emerald-700 transition-colors"
-                >
-                  <img 
-                    src={item.image} 
-                    alt={item.name}
-                    class="w-12 h-12 object-contain rounded-xl border border-slate-100 bg-white p-1 shrink-0 shadow-2xs"
-                    loading="lazy"
-                  />
-                  <span class="line-clamp-2 max-w-[180px] sm:max-w-xs">{item.name}</span>
-                </a>
+                {url ? (
+                  <a 
+                    href={url} 
+                    target="_blank" 
+                    rel={relAttr}
+                    class="flex items-center gap-3.5 font-bold text-slate-900 hover:text-emerald-700 transition-colors"
+                  >
+                    <img 
+                      src={item.image} 
+                      alt={item.name}
+                      class="w-12 h-12 object-contain rounded-xl border border-slate-100 bg-white p-1 shrink-0 shadow-2xs"
+                      loading="lazy"
+                    />
+                    <span class="line-clamp-2 max-w-[180px] sm:max-w-xs">{item.name}</span>
+                  </a>
+                ) : (
+                  <div class="flex items-center gap-3.5 font-bold text-slate-700">
+                    <img 
+                      src={item.image} 
+                      alt={item.name}
+                      class="w-12 h-12 object-contain rounded-xl border border-slate-100 bg-slate-50 p-1 shrink-0 opacity-70"
+                      loading="lazy"
+                    />
+                    <span class="line-clamp-2 max-w-[180px] sm:max-w-xs text-slate-600">{item.name}</span>
+                  </div>
+                )}
               </td>
               <td class="py-4 px-4 whitespace-nowrap">
                 {item.badge ? (
@@ -104,22 +116,30 @@ const relAttr = getAffiliateRel();
                 <span class="text-amber-500 ml-0.5">★</span>
               </td>
               <td class="py-4 px-4 text-center whitespace-nowrap">
-                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
-                  {item.guaranteeDays || 60} Days
-                </span>
+                {item.guaranteeDays && item.guaranteeDays > 0 ? (
+                  <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                    {item.guaranteeDays} Days
+                  </span>
+                ) : (
+                  <span class="text-slate-400 text-xs">No Guarantee</span>
+                )}
               </td>
               <td class="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
-                <a 
-                  href={url} 
-                  target="_blank" 
-                  rel={relAttr}
-                  class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-2xs hover:shadow-xs transition-all"
-                >
-                  <span>Visit Site</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </a>
+                {url ? (
+                  <a 
+                    href={url} 
+                    target="_blank" 
+                    rel={relAttr}
+                    class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-2xs hover:shadow-xs transition-all"
+                  >
+                    <span>Visit Site</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </a>
+                ) : (
+                  <span class="text-slate-400 text-xs italic px-3 py-1.5">Standard Service</span>
+                )}
               </td>
             </tr>
           );

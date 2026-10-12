@@ -111,7 +111,7 @@
   },
   {
     "slug": "prodentim-oral-health-review",
-    "status": "pending",
+    "status": "published",
     "title": "ProDentim Review 2026: Can Probiotics Truly Support Teeth and Gums?",
     "description": "Comprehensive evaluation of ProDentim advanced oral probiotics. Clinical strain analysis, real user feedback, safety warnings, and the 60-day money-back guarantee.",
     "author": "Natural Health & Nutrition Team",
@@ -216,6 +216,7 @@
         "question": "Can I request a refund if I am not satisfied?",
         "answer": "Yes. If you don't see noticeable improvements in your gums and breath, you can request a 100% refund within 60 days of purchase directly through ClickBank."
       }
-    ]
+    ],
+    "publishedAt": "2026-10-12"
   }
 ]

@@ -15,6 +15,22 @@ const sortedArticles = allArticles.sort(
   (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
 );
 const featuredArticle = sortedArticles.find((a) => a.data.featured) || sortedArticles[0];
+
+const petArticles = sortedArticles.filter((a) =>
+  a.data.category.toLowerCase().includes('pet') ||
+  a.data.category.toLowerCase().includes('dog')
+);
+
+const homeArticles = sortedArticles.filter((a) =>
+  a.data.category.toLowerCase().includes('home') ||
+  a.data.category.toLowerCase().includes('craft') ||
+  a.data.category.toLowerCase().includes('wood')
+);
+
+const healthArticles = sortedArticles.filter((a) =>
+  a.data.category.toLowerCase().includes('health') ||
+  a.data.category.toLowerCase().includes('wellness')
+);
 ---
 
 <BaseLayout
@@ -117,58 +133,170 @@ const featuredArticle = sortedArticles.find((a) => a.data.featured) || sortedArt
       </section>
     )}
 
-    <!-- Grade de Todos os Guias -->
-    <section class="my-14" id="reviews">
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
-            <span class="w-2.5 h-6 bg-slate-900 rounded-sm"></span>
-            Comprehensive Training & Wellness Guides
-          </h2>
-          <p class="text-xs text-slate-500 mt-1">Audited with behavioral science principles and verified refund policies</p>
+    <!-- Seção Pet Care & Training -->
+    {petArticles.length > 0 && (
+      <section class="my-16 scroll-mt-24" id="pet-care">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+              <span class="w-2.5 h-6 bg-emerald-600 rounded-sm"></span>
+              Pet Care & Dog Training Guides
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Science-backed positive behavioral solutions and anxiety relief</p>
+          </div>
         </div>
-      </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedArticles.map((article) => {
-          const slug = article.id.replace(/\.(md|mdx)$/, '');
-          return (
-            <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between group">
-              <div>
-                <a href={`${baseUrl}/articles/${slug}`} class="block overflow-hidden aspect-video bg-slate-100">
-                  <img 
-                    src={article.data.heroImage} 
-                    alt={article.data.heroImageAlt || article.data.title}
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                </a>
-                <div class="p-6">
-                  <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block mb-1">
-                    {article.data.category}
-                  </span>
-                  <h3 class="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-emerald-700 transition-colors">
-                    <a href={`${baseUrl}/articles/${slug}`}>
-                      {article.data.title}
-                    </a>
-                  </h3>
-                  <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed">
-                    {article.data.description}
-                  </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {petArticles.map((article) => {
+            const slug = article.id.replace(/\.(md|mdx)$/, '');
+            return (
+              <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between group">
+                <div>
+                  <a href={`${baseUrl}/articles/${slug}`} class="block overflow-hidden aspect-video bg-slate-100">
+                    <img 
+                      src={article.data.heroImage} 
+                      alt={article.data.heroImageAlt || article.data.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </a>
+                  <div class="p-6">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block mb-1">
+                      {article.data.category}
+                    </span>
+                    <h3 class="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-emerald-700 transition-colors">
+                      <a href={`${baseUrl}/articles/${slug}`}>
+                        {article.data.title}
+                      </a>
+                    </h3>
+                    <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed">
+                      {article.data.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-100 text-xs text-slate-500">
-                <span>{new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(article.data.publishDate))}</span>
-                <a href={`${baseUrl}/articles/${slug}`} class="font-bold text-slate-900 group-hover:text-emerald-700 flex items-center gap-1">
-                  Read guide <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                </a>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-    </section>
+                <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-100 text-xs text-slate-500">
+                  <span>{new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(article.data.publishDate))}</span>
+                  <a href={`${baseUrl}/articles/${slug}`} class="font-bold text-slate-900 group-hover:text-emerald-700 flex items-center gap-1">
+                    Read guide <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <!-- Seção Home, Crafts & DIY -->
+    {homeArticles.length > 0 && (
+      <section class="my-16 scroll-mt-24" id="home-diy">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+              <span class="w-2.5 h-6 bg-amber-600 rounded-sm"></span>
+              Home, Crafts & DIY Projects
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Tested blueprints, workshop plans, and step-by-step homeowner guides</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {homeArticles.map((article) => {
+            const slug = article.id.replace(/\.(md|mdx)$/, '');
+            return (
+              <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between group">
+                <div>
+                  <a href={`${baseUrl}/articles/${slug}`} class="block overflow-hidden aspect-video bg-slate-100">
+                    <img 
+                      src={article.data.heroImage} 
+                      alt={article.data.heroImageAlt || article.data.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </a>
+                  <div class="p-6">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-amber-800 block mb-1">
+                      {article.data.category}
+                    </span>
+                    <h3 class="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-amber-700 transition-colors">
+                      <a href={`${baseUrl}/articles/${slug}`}>
+                        {article.data.title}
+                      </a>
+                    </h3>
+                    <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed">
+                      {article.data.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-100 text-xs text-slate-500">
+                  <span>{new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(article.data.publishDate))}</span>
+                  <a href={`${baseUrl}/articles/${slug}`} class="font-bold text-slate-900 group-hover:text-amber-700 flex items-center gap-1">
+                    Read guide <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    <!-- Seção Health & Natural Wellness -->
+    {healthArticles.length > 0 && (
+      <section class="my-16 scroll-mt-24" id="health-wellness">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+              <span class="w-2.5 h-6 bg-teal-600 rounded-sm"></span>
+              Health & Natural Wellness
+            </h2>
+            <p class="text-xs text-slate-500 mt-1">Evidence-backed microbiome formulas, nutritional audits, and wellness essentials</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {healthArticles.map((article) => {
+            const slug = article.id.replace(/\.(md|mdx)$/, '');
+            return (
+              <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between group">
+                <div>
+                  <a href={`${baseUrl}/articles/${slug}`} class="block overflow-hidden aspect-video bg-slate-100">
+                    <img 
+                      src={article.data.heroImage} 
+                      alt={article.data.heroImageAlt || article.data.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                  </a>
+                  <div class="p-6">
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-teal-800 block mb-1">
+                      {article.data.category}
+                    </span>
+                    <h3 class="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-teal-700 transition-colors">
+                      <a href={`${baseUrl}/articles/${slug}`}>
+                        {article.data.title}
+                      </a>
+                    </h3>
+                    <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed">
+                      {article.data.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-100 text-xs text-slate-500">
+                  <span>{new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(article.data.publishDate))}</span>
+                  <a href={`${baseUrl}/articles/${slug}`} class="font-bold text-slate-900 group-hover:text-teal-700 flex items-center gap-1">
+                    Read guide <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                  </a>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
 
     <!-- Por que confiar em nossas recomendações (E-E-A-T) -->
     <section class="my-16 bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-2xs">
