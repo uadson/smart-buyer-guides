@@ -7,7 +7,7 @@
 
 export const DEFAULT_CLICKBANK_AFFILIATE =
   (typeof process !== 'undefined' && process.env?.PUBLIC_CLICKBANK_AFFILIATE_ID) ||
-  'cbafiliado';
+  'squadflier';
 
 const VENDOR_REGEX = /(?:vendor=([a-z0-9_-]+))|(?:^https?:\/\/([a-z0-9_-]+)\.([a-z0-9_-]+)\.hop\.clickbank\.net)/i;
 
