@@ -36,7 +36,7 @@ jobs:
       - name: Build static site with Astro
         run: npm run build
         env:
-          BASE_PATH: /clickbank-affiliate-niche-site
+          BASE_PATH: /smart-buyer-guides
           SITE_URL: https://uadson.github.io
 
       - name: Upload Pages artifact

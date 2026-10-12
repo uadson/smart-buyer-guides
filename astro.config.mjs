@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: process.env.SITE_URL ?? 'https://uadson.github.io',
-  base: process.env.BASE_PATH ?? '/clickbank-affiliate-niche-site',
+  base: process.env.BASE_PATH ?? '/smart-buyer-guides',
   output: 'static',
   integrations: [mdx(), sitemap()],
   vite: {

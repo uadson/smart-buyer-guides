@@ -26,7 +26,7 @@ const {
   pinterestDomainVerify = (typeof process !== 'undefined' && process.env?.PUBLIC_PINTEREST_DOMAIN_VERIFY) || undefined,
 } = Astro.props;
 
-const siteTitle = title.includes('|') ? title : `${title} | Paw & Mind Guides`;
+const siteTitle = title.includes('|') ? title : `${title} | Smart Choice Guides`;
 const resolvedOgImage = new URL(ogImage, Astro.site || Astro.url.origin).href;
 ---
 
