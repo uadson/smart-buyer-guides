@@ -13,18 +13,18 @@ import {
 describe('affiliate utils (utilitários de afiliado ClickBank)', () => {
   describe('extractVendor', () => {
     it('deve extrair o código de vendor diretamente de uma string de vendor', () => {
-      const vendor = 'bt4dogs';
-      expect(extractVendor(vendor)).toBe('bt4dogs');
+      const vendor = 'brainydogs';
+      expect(extractVendor(vendor)).toBe('brainydogs');
     });
 
     it('deve extrair o vendor de uma URL canônica hop.clickbank.net', () => {
-      const url = 'https://hop.clickbank.net/?affiliate=myaccount&vendor=bt4dogs&tid=seo_review';
-      expect(extractVendor(url)).toBe('bt4dogs');
+      const url = 'https://hop.clickbank.net/?affiliate=myaccount&vendor=brainydogs&tid=seo_review';
+      expect(extractVendor(url)).toBe('brainydogs');
     });
 
     it('deve extrair o vendor de uma URL clássica do formato subdomínio', () => {
-      const url = 'https://myaccount.bt4dogs.hop.clickbank.net';
-      expect(extractVendor(url)).toBe('bt4dogs');
+      const url = 'https://myaccount.brainydogs.hop.clickbank.net';
+      expect(extractVendor(url)).toBe('brainydogs');
     });
 
     it('deve retornar null para strings vazias ou URLs inválidas sem vendor', () => {
@@ -35,33 +35,33 @@ describe('affiliate utils (utilitários de afiliado ClickBank)', () => {
 
   describe('buildClickbankUrl', () => {
     it('deve gerar a URL canônica do ClickBank a partir de um código de vendor', () => {
-      const vendor = 'bt4dogs';
+      const vendor = 'brainydogs';
       const result = buildClickbankUrl(vendor);
-      expect(result).toBe(`https://hop.clickbank.net/?affiliate=${DEFAULT_CLICKBANK_AFFILIATE}&vendor=bt4dogs`);
+      expect(result).toBe(`https://hop.clickbank.net/?affiliate=${DEFAULT_CLICKBANK_AFFILIATE}&vendor=brainydogs`);
     });
 
     it('deve permitir especificar um nickname de afiliado customizado', () => {
-      const vendor = 'tedwood';
+      const vendor = 'tedsplans';
       const result = buildClickbankUrl(vendor, { affiliate: 'customnick' });
-      expect(result).toBe('https://hop.clickbank.net/?affiliate=customnick&vendor=tedwood');
+      expect(result).toBe('https://hop.clickbank.net/?affiliate=customnick&vendor=tedsplans');
     });
 
     it('deve incluir o tracking id (tid) quando fornecido', () => {
-      const vendor = 'bt4dogs';
+      const vendor = 'brainydogs';
       const result = buildClickbankUrl(vendor, { tid: 'hero_cta' });
-      expect(result).toBe(`https://hop.clickbank.net/?affiliate=${DEFAULT_CLICKBANK_AFFILIATE}&vendor=bt4dogs&tid=hero_cta`);
+      expect(result).toBe(`https://hop.clickbank.net/?affiliate=${DEFAULT_CLICKBANK_AFFILIATE}&vendor=brainydogs&tid=hero_cta`);
     });
 
     it('deve incluir a página customizada (page) quando fornecida', () => {
-      const vendor = 'bt4dogs';
+      const vendor = 'brainydogs';
       const result = buildClickbankUrl(vendor, { page: 'discount' });
-      expect(result).toBe(`https://hop.clickbank.net/?affiliate=${DEFAULT_CLICKBANK_AFFILIATE}&vendor=bt4dogs&page=discount`);
+      expect(result).toBe(`https://hop.clickbank.net/?affiliate=${DEFAULT_CLICKBANK_AFFILIATE}&vendor=brainydogs&page=discount`);
     });
 
     it('deve higienizar uma URL HopLink existente e reinjetar parâmetros canônicos', () => {
-      const url = 'https://hop.clickbank.net/?affiliate=oldnick&vendor=bt4dogs&bad=123';
+      const url = 'https://hop.clickbank.net/?affiliate=oldnick&vendor=brainydogs&bad=123';
       const result = buildClickbankUrl(url, { affiliate: 'newnick', tid: 'vsl' });
-      expect(result).toBe('https://hop.clickbank.net/?affiliate=newnick&vendor=bt4dogs&tid=vsl');
+      expect(result).toBe('https://hop.clickbank.net/?affiliate=newnick&vendor=brainydogs&tid=vsl');
     });
 
     it('deve retornar a URL original caso não seja possível identificar o vendor', () => {
