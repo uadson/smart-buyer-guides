@@ -1,0 +1,59 @@
+---
+/**
+ * Componente de Perguntas Frequentes (FAQ Accordion).
+ *
+ * Apresenta dúvidas comuns dos consumidores americanos, quebrando objeções
+ * de compra e suportando marcação Schema.org FAQPage.
+ */
+import { buildFaqSchema } from '../utils/seo';
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  title?: string;
+  items: FaqItem[];
+  showSchema?: boolean;
+}
+
+const {
+  title = 'Frequently Asked Questions',
+  items = [],
+  showSchema = true,
+} = Astro.props;
+
+const faqSchema = showSchema ? buildFaqSchema(items) : null;
+---
+
+<section class="my-10 bg-slate-50/80 rounded-3xl p-6 sm:p-8 border border-slate-200">
+  {showSchema && (
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(faqSchema)}
+    />
+  )}
+
+  <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
+    <span class="w-2 h-6 bg-emerald-600 rounded-sm"></span>
+    {title}
+  </h3>
+
+  <div class="space-y-4">
+    {items.map((item) => (
+      <details class="group bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 transition-colors open:border-emerald-300">
+        <summary class="font-bold text-sm sm:text-base text-slate-900 cursor-pointer list-none flex items-center justify-between gap-3 select-none">
+          <span>{item.question}</span>
+          <span class="w-6 h-6 rounded-full bg-slate-100 group-open:bg-emerald-100 group-open:text-emerald-800 text-slate-500 flex items-center justify-center text-xs font-bold shrink-0 transition-transform group-open:rotate-180">
+            ↓
+          </span>
+        </summary>
+        <div class="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed pt-3 border-t border-slate-100">
+          <p>{item.answer}</p>
+        </div>
+      </details>
+    ))}
+  </div>
+</section>

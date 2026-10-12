@@ -1,0 +1,199 @@
+---
+/**
+ * Template Base de Artigo e Review Focado em Conversão e SEO para ClickBank.
+ *
+ * Implementa Schema.org Article, breadcrumbs estruturados, banner FTC no topo,
+ * garantia incondicional de reembolso e barra fixa para conversão em mobile.
+ */
+import BaseLayout from './BaseLayout.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import MoneyBackGuaranteeBadge from '../components/MoneyBackGuaranteeBadge.astro';
+import StickyMobileBar from '../components/StickyMobileBar.astro';
+import { buildArticleSchema, buildBreadcrumbSchema } from '../utils/seo';
+
+interface Props {
+  title: string;
+  description: string;
+  publishDate: Date | string;
+  updatedDate?: Date | string;
+  author?: string;
+  category?: string;
+  heroImage?: string;
+  heroImageAlt?: string;
+  tags?: string[];
+  topPickName?: string;
+  topPickVendor?: string;
+  guaranteeDays?: number;
+  showGuaranteeBadge?: boolean;
+  includeFdaDisclaimer?: boolean;
+}
+
+const {
+  title,
+  description,
+  publishDate,
+  updatedDate,
+  author = 'Canine Behavior & Training Team',
+  category = 'Dog Training & Pet Care',
+  heroImage,
+  heroImageAlt = title,
+  tags = [],
+  topPickName,
+  topPickVendor,
+  guaranteeDays = 60,
+  showGuaranteeBadge = true,
+  includeFdaDisclaimer = false,
+} = Astro.props;
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentUrl = Astro.url.href;
+
+// Formatação amigável de datas no padrão norte-americano
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+}).format(new Date(publishDate));
+
+const formattedUpdatedDate = updatedDate ? new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+}).format(new Date(updatedDate)) : null;
+
+// Schemas JSON-LD
+const articleSchema = buildArticleSchema({
+  title,
+  description,
+  url: currentUrl,
+  publishDate,
+  updatedDate,
+  author,
+  image: heroImage ? new URL(heroImage, Astro.site || Astro.url.origin).href : undefined,
+});
+
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', url: new URL(baseUrl || '/', Astro.site || Astro.url.origin).href },
+  { name: category, url: new URL(`${baseUrl}/#${category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`, Astro.site || Astro.url.origin).href },
+  { name: title, url: currentUrl },
+]);
+
+const combinedSchemas = [articleSchema, breadcrumbSchema];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalUrl={currentUrl}
+  ogImage={heroImage}
+  ogType="article"
+  schema={combinedSchemas}
+>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- Breadcrumb de Navegação -->
+    <nav class="flex items-center gap-2 text-xs text-slate-500 mb-6 overflow-x-auto" aria-label="Breadcrumb">
+      <a href={`${baseUrl}/`} class="hover:text-slate-900 transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-emerald-700 font-semibold">{category}</span>
+      <span>/</span>
+      <span class="text-slate-400 truncate max-w-[200px] sm:max-w-xs">{title}</span>
+    </nav>
+
+    <!-- Cabeçalho do Artigo -->
+    <header class="mb-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-bold uppercase tracking-wider mb-4 border border-emerald-200">
+        <span>{category}</span>
+        <span>•</span>
+        <span>Tested & Expert-Verified</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight leading-tight">
+        {title}
+      </h1>
+
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed font-normal">
+        {description}
+      </p>
+
+      <!-- Metadados de Autoria e Atualização (E-E-A-T) -->
+      <div class="mt-6 pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-slate-900 text-emerald-400 border border-slate-300 flex items-center justify-center font-black text-sm">
+            {author.charAt(0)}
+          </div>
+          <div>
+            <span class="font-bold text-slate-900 block">{author}</span>
+            <span>Independent Canine Review Team</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div>
+            <span class="text-slate-400">Published:</span>
+            <time datetime={new Date(publishDate).toISOString()} class="font-medium text-slate-700 ml-1">
+              {formattedDate}
+            </time>
+          </div>
+          {formattedUpdatedDate && (
+            <div class="bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-md border border-emerald-200 font-medium">
+              <span>Updated: <strong>{formattedUpdatedDate}</strong></span>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <!-- FTC Disclosure Banner no Topo (Obrigatório pela FTC nos EUA) -->
+    <AffiliateDisclosure variant="banner" showFda={includeFdaDisclaimer} />
+
+    <!-- Imagem Hero (se fornecida) -->
+    {heroImage && (
+      <div class="my-8 rounded-3xl overflow-hidden border border-slate-200 bg-slate-100 shadow-xs">
+        <img 
+          src={heroImage} 
+          alt={heroImageAlt}
+          width="1200"
+          height="630"
+          class="w-full h-auto object-cover max-h-[480px]"
+          loading="eager"
+        />
+      </div>
+    )}
+
+    <!-- Corpo do Artigo em Markdown/MDX -->
+    <div class="prose max-w-none text-slate-800">
+      <slot />
+    </div>
+
+    <!-- Selo de Garantia de Reembolso Incondicional -->
+    {showGuaranteeBadge && (
+      <MoneyBackGuaranteeBadge days={guaranteeDays} variant="banner" />
+    )}
+
+    <!-- Tags do Artigo -->
+    {tags.length > 0 && (
+      <div class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center gap-2">
+        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Related Topics:</span>
+        {tags.map((tag) => (
+          <span class="inline-block bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-1 rounded-lg transition-colors font-medium">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    )}
+
+    <!-- Disclosure no rodapé do artigo com ClickBank Disclaimer -->
+    <div class="mt-10">
+      <AffiliateDisclosure variant="card" showFda={includeFdaDisclaimer} />
+    </div>
+  </article>
+
+  <!-- Barra Flutuante Mobile de Alta Conversão -->
+  {topPickName && topPickVendor && (
+    <StickyMobileBar
+      productName={topPickName}
+      vendor={topPickVendor}
+      guaranteeDays={guaranteeDays}
+    />
+  )}
+</BaseLayout>

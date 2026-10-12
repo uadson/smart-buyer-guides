@@ -1,0 +1,73 @@
+---
+/**
+ * Componente de Rodapé do Site.
+ *
+ * Contém os disclaimers obrigatórios da FTC, ClickBank (Click Sales, Inc.),
+ * declarações de isenção de responsabilidade médica/FDA e links de conformidade legal.
+ */
+import {
+  getFtcDisclosure,
+  getClickbankDisclaimer,
+  getFdaDisclaimer,
+} from '../utils/affiliate';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const currentYear = new Date().getFullYear();
+const ftcText = getFtcDisclosure();
+const cbText = getClickbankDisclaimer();
+const fdaText = getFdaDisclaimer();
+---
+
+<footer class="bg-slate-900 text-slate-400 text-xs mt-auto border-t border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10 pb-10 border-b border-slate-800">
+      <!-- Coluna de Marca -->
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2.5 mb-3">
+          <div class="w-8 h-8 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-sm">
+            PM
+          </div>
+          <span class="font-extrabold text-white text-base">Paw & Mind Guides</span>
+        </div>
+        <p class="text-slate-400 text-xs leading-relaxed max-w-md mb-4">
+          Independent, research-driven reviews of science-backed canine behavioral training and natural pet wellness programs. We help American pet parents make well-informed, risk-free choices for their companions.
+        </p>
+      </div>
+
+      <!-- Links de Navegação -->
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Popular Categories</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href={`${baseUrl}/#dog-training`} class="hover:text-emerald-400 transition-colors">Positive Canine Training</a></li>
+          <li><a href={`${baseUrl}/#behavior`} class="hover:text-emerald-400 transition-colors">Separation & Anxiety Tools</a></li>
+          <li><a href={`${baseUrl}/#reviews`} class="hover:text-emerald-400 transition-colors">Certified Trainer Courses</a></li>
+        </ul>
+      </div>
+
+      <!-- Links Legais & Conformidade -->
+      <div>
+        <h4 class="font-bold text-white text-sm mb-3">Trust & Legal</h4>
+        <ul class="space-y-2 text-xs">
+          <li><a href={`${baseUrl}/disclosure`} class="hover:text-emerald-400 transition-colors">Affiliate & FTC Disclosure</a></li>
+          <li><a href={`${baseUrl}/privacy`} class="hover:text-emerald-400 transition-colors">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Declarações Legais Obrigatórias: FTC, ClickBank e FDA -->
+    <div class="space-y-4 text-slate-400 text-[11px] leading-relaxed">
+      <p>
+        <strong class="text-slate-300">FTC Affiliate Disclosure:</strong> {ftcText}
+      </p>
+      <p>
+        <strong class="text-slate-300">ClickBank Disclaimer:</strong> {cbText}
+      </p>
+      <p>
+        <strong class="text-slate-300">Health & Wellness Notice:</strong> {fdaText}
+      </p>
+      <p class="pt-6 border-t border-slate-800 text-slate-400 text-center sm:text-left">
+        &copy; {currentYear} Paw & Mind Guides. All rights reserved. ClickBank is a registered trademark of Click Sales, Inc.
+      </p>
+    </div>
+  </div>
+</footer>

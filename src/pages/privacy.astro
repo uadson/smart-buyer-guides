@@ -1,0 +1,44 @@
+---
+/**
+ * Página de Política de Privacidade do Site.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="Privacy policy and data protection disclosures for Paw & Mind Guides."
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 prose text-slate-800">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-950 mb-6">Privacy Policy</h1>
+
+    <p class="text-xs text-slate-500">Last updated: January {currentYear}</p>
+
+    <h2>Introduction</h2>
+    <p>
+      Paw & Mind Guides ("we," "our," or "us") respects your privacy. This policy outlines how information is handled when you visit our website.
+    </p>
+
+    <h2>Information We Do Not Collect</h2>
+    <p>
+      We do not collect personal identifying information (PII) such as your name, billing address, credit card numbers, or bank details. All transactions occur on third-party payment gateways managed by ClickBank (Click Sales, Inc.) or merchant checkout portals.
+    </p>
+
+    <h2>Cookies and Affiliate Tracking</h2>
+    <p>
+      When you click outbound affiliate links to merchant websites or ClickBank offers, affiliate tracking cookies may be set by ClickBank to track referrals for commission accounting. These cookies typically expire after 60 days.
+    </p>
+
+    <h2>Third-Party Services & Links</h2>
+    <p>
+      Our website contains links to external websites that are not operated by us. We encourage you to review the privacy policy and terms of each external website you visit.
+    </p>
+
+    <h2>Contact Us</h2>
+    <p>
+      If you have questions regarding this Privacy Policy, please contact our editorial staff via our website repository.
+    </p>
+  </div>
+</BaseLayout>

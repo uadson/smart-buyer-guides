@@ -1,0 +1,65 @@
+---
+/**
+ * Componente de Selo de Garantia de Reembolso Incondicional do ClickBank.
+ *
+ * Transmite máxima segurança e autoridade ao consumidor norte-americano,
+ * destacando a política oficial de devolução de 60 dias sem risco.
+ */
+import { getGuaranteeText } from '../utils/affiliate';
+
+interface Props {
+  days?: number;
+  className?: string;
+  variant?: 'banner' | 'compact' | 'badge';
+}
+
+const {
+  days = 60,
+  className = '',
+  variant = 'banner',
+} = Astro.props;
+
+const guaranteeText = getGuaranteeText(days);
+---
+
+{variant === 'banner' && (
+  <div class={`bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border-2 border-emerald-300/80 rounded-2xl p-5 sm:p-6 my-8 shadow-xs ${className}`}>
+    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+      <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex flex-col items-center justify-center shrink-0 shadow-md">
+        <span class="text-xs font-black uppercase leading-none">100%</span>
+        <span class="text-lg font-black leading-none">{days}</span>
+        <span class="text-[9px] font-bold uppercase leading-none">DAYS</span>
+      </div>
+      <div>
+        <div class="flex items-center gap-2 mb-1 justify-center sm:justify-start">
+          <span class="inline-flex items-center gap-1 text-emerald-800 font-extrabold text-sm sm:text-base uppercase tracking-wide">
+            <svg class="w-5 h-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            Official 60-Day Money-Back Guarantee
+          </span>
+          <span class="bg-emerald-200 text-emerald-900 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Risk Free</span>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed text-center sm:text-left">
+          {guaranteeText}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
+
+{variant === 'compact' && (
+  <div class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium ${className}`}>
+    <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+    </svg>
+    <span><strong>60-Day Money-Back Guarantee</strong> • Zero Risk</span>
+  </div>
+)}
+
+{variant === 'badge' && (
+  <div class={`flex items-center gap-2 text-xs font-bold text-emerald-800 ${className}`}>
+    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+    <span>Protected by ClickBank Customer Refund Policy (60 Days)</span>
+  </div>
+)}

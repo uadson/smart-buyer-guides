@@ -1,0 +1,54 @@
+---
+/**
+ * Página Dedicada de Divulgação de Afiliados e Conformidade FTC & ClickBank.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import {
+  getFtcDisclosure,
+  getClickbankDisclaimer,
+  getFdaDisclaimer,
+} from '../utils/affiliate';
+
+const ftcText = getFtcDisclosure();
+const cbText = getClickbankDisclaimer();
+const fdaText = getFdaDisclaimer();
+---
+
+<BaseLayout
+  title="Affiliate & FTC Disclosure"
+  description="Full transparency statement and ClickBank affiliate compliance for Paw & Mind Guides."
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 prose text-slate-800">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-950 mb-6">Affiliate Disclosure Statement</h1>
+
+    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-emerald-950 text-sm mb-8">
+      <p class="font-bold mb-1">FTC Compliance Statement:</p>
+      <p>{ftcText}</p>
+    </div>
+
+    <h2>ClickBank Affiliate Program</h2>
+    <p>
+      Paw & Mind Guides participates in affiliate marketing programs, including the ClickBank affiliate network. This means we may earn a referral commission when you click on links pointing to official vendor sales pages and make a purchase.
+    </p>
+
+    <h2>ClickBank Legal Disclaimer</h2>
+    <p class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
+      {cbText}
+    </p>
+
+    <h2>How Our Affiliate Links Work</h2>
+    <p>
+      When you click a link or button on this site (such as "Visit Official Website" or "Claim 60-Day Risk-Free"), your browser receives a tracking cookie provided by ClickBank. If you finalize an order, we earn an affiliate commission directly from the product vendor. This does <strong>not</strong> increase the purchase price for you in any way; in fact, many links grant access to official promotional discounts.
+    </p>
+
+    <h2>60-Day Money-Back Guarantee</h2>
+    <p>
+      All digital products and courses promoted through ClickBank on our website come backed by an unconditional 60-day customer satisfaction refund policy. You have 60 full days to evaluate the program and request a 100% refund through ClickBank customer support if it does not meet your expectations.
+    </p>
+
+    <h2>Health, Dietary, and Veterinary Notice</h2>
+    <p class="text-xs text-slate-500 italic">
+      {fdaText} Always consult your licensed veterinarian or qualified animal behavioral specialist regarding any health or behavioral concerns about your pets.
+    </p>
+  </div>
+</BaseLayout>

@@ -1,0 +1,216 @@
+---
+/**
+ * Página Inicial (Homepage) do Site de Afiliados ClickBank.
+ *
+ * Apresenta curadoria editorial, categorias principais, guia em destaque
+ * e métricas de autoridade (E-E-A-T) para o consumidor americano.
+ */
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const allArticles = await getCollection('articles');
+const sortedArticles = allArticles.sort(
+  (a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+const featuredArticle = sortedArticles.find((a) => a.data.featured) || sortedArticles[0];
+---
+
+<BaseLayout
+  title="Paw & Mind - Evidence-Based Canine Training & Pet Care Guides"
+  description="In-depth, veterinarian and CPDT-KA verified canine behavior reviews and training program breakdowns. Safe, positive reinforcement solutions backed by 60-day guarantees."
+>
+  <!-- Hero Section de Alta Autoridade e Confiança -->
+  <section class="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white py-16 sm:py-24 border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 text-emerald-300 text-xs font-bold mb-6 border border-emerald-500/30">
+        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span>Independent Research • Force-Free Training Focus</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight max-w-4xl mx-auto leading-tight">
+        Smarter, Calmer Dogs Through <span class="text-emerald-400">Proven Science</span>
+      </h1>
+
+      <p class="mt-6 text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
+        We test, audit, and analyze popular home dog training courses and pet wellness solutions so American dog parents can solve behavioral issues without expensive $3,000 boot camps.
+      </p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-6 text-xs text-slate-400">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          100% Force-Free & Humane
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          60-Day Money-Back Protection
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          Certified CPDT-KA Analysis
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Container Principal -->
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <AffiliateDisclosure variant="banner" />
+
+    <!-- Guia em Destaque Principal -->
+    {featuredArticle && (
+      <section class="my-10" id="featured">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+            <span class="w-2.5 h-6 bg-emerald-600 rounded-sm"></span>
+            Featured Deep Dive Review
+          </h2>
+          <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+            Editor's Choice
+          </span>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 grid grid-cols-1 md:grid-cols-12 group">
+          <div class="md:col-span-6 overflow-hidden bg-slate-100 flex items-center justify-center max-h-[440px]">
+            <img 
+              src={featuredArticle.data.heroImage || 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&auto=format&fit=crop&q=80'} 
+              alt={featuredArticle.data.heroImageAlt || featuredArticle.data.title}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="eager"
+            />
+          </div>
+          <div class="md:col-span-6 p-6 sm:p-10 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-xs font-bold text-emerald-800 uppercase tracking-wider mb-2">
+                <span>{featuredArticle.data.category}</span>
+                <span>•</span>
+                <span>Top Rated</span>
+              </div>
+
+              <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-950 group-hover:text-emerald-700 transition-colors leading-tight">
+                <a href={`${baseUrl}/articles/${featuredArticle.id.replace(/\.(md|mdx)$/, '')}`}>
+                  {featuredArticle.data.title}
+                </a>
+              </h3>
+
+              <p class="mt-4 text-slate-600 text-sm sm:text-base leading-relaxed">
+                {featuredArticle.data.description}
+              </p>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
+              <span class="text-xs text-slate-500">
+                By <strong class="text-slate-800">{featuredArticle.data.author}</strong>
+              </span>
+
+              <a 
+                href={`${baseUrl}/articles/${featuredArticle.id.replace(/\.(md|mdx)$/, '')}`}
+                class="inline-flex items-center gap-1.5 px-6 py-3 rounded-2xl bg-emerald-600 text-white font-bold text-xs sm:text-sm hover:bg-emerald-700 transition-all shadow-sm"
+              >
+                <span>Read Full Review</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Grade de Todos os Guias -->
+    <section class="my-14" id="reviews">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+            <span class="w-2.5 h-6 bg-slate-900 rounded-sm"></span>
+            Comprehensive Training & Wellness Guides
+          </h2>
+          <p class="text-xs text-slate-500 mt-1">Audited with behavioral science principles and verified refund policies</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedArticles.map((article) => {
+          const slug = article.id.replace(/\.(md|mdx)$/, '');
+          return (
+            <article class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between group">
+              <div>
+                <a href={`${baseUrl}/articles/${slug}`} class="block overflow-hidden aspect-video bg-slate-100">
+                  <img 
+                    src={article.data.heroImage} 
+                    alt={article.data.heroImageAlt || article.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                  />
+                </a>
+                <div class="p-6">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-800 block mb-1">
+                    {article.data.category}
+                  </span>
+                  <h3 class="font-extrabold text-slate-900 text-lg leading-snug group-hover:text-emerald-700 transition-colors">
+                    <a href={`${baseUrl}/articles/${slug}`}>
+                      {article.data.title}
+                    </a>
+                  </h3>
+                  <p class="text-xs text-slate-600 mt-2 line-clamp-3 leading-relaxed">
+                    {article.data.description}
+                  </p>
+                </div>
+              </div>
+
+              <div class="px-6 pb-6 pt-2 flex items-center justify-between border-t border-slate-100 text-xs text-slate-500">
+                <span>{new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(article.data.publishDate))}</span>
+                <a href={`${baseUrl}/articles/${slug}`} class="font-bold text-slate-900 group-hover:text-emerald-700 flex items-center gap-1">
+                  Read guide <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- Por que confiar em nossas recomendações (E-E-A-T) -->
+    <section class="my-16 bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-2xs">
+      <div class="max-w-2xl">
+        <span class="text-xs font-black uppercase tracking-widest text-emerald-700">Our Review Standards</span>
+        <h2 class="text-3xl font-black text-slate-950 mt-1">Why Pet Parents Trust Our Guidance</h2>
+        <p class="text-slate-600 text-sm mt-3 leading-relaxed">
+          We reject fear-based, punitive training equipment and misleading claims. Our evaluations focus exclusively on positive reinforcement methodologies developed by certified behavioral specialists.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 pt-8 border-t border-slate-100">
+        <div class="space-y-2">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
+            01
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm">Force-Free Science</h4>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            We evaluate whether training courses eliminate root behavioral causes through neuroplasticity games rather than suppressing symptoms through intimidation.
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
+            02
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm">60-Day Refund Audits</h4>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Every product recommended on this site is backed by ClickBank's official 60-day customer guarantee, giving you complete financial safety.
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
+            03
+          </div>
+          <h4 class="font-bold text-slate-900 text-sm">Total Transparency</h4>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            We display clear affiliate disclosures and direct links to official vendor pages, ensuring you always get direct authorized pricing and bonus materials.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

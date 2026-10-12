@@ -1,0 +1,272 @@
+---
+/**
+ * Componente de Card de Produto Otimizado para Alta Conversão de Afiliados ClickBank.
+ *
+ * Apresenta o produto com badges de destaque, criador/autoridade, nota, prós/contras,
+ * garantia incondicional de reembolso de 60 dias, link canônico HopLink e Schema.org.
+ */
+import {
+  buildClickbankUrl,
+  getAffiliateRel,
+} from '../utils/affiliate';
+import { buildProductSchema } from '../utils/seo';
+
+interface Props {
+  name: string;
+  tagline?: string;
+  badge?: string;
+  rank?: number;
+  image: string;
+  imageAlt?: string;
+  vendor: string;
+  creator?: string;
+  rating?: number;
+  reviewCount?: number;
+  pros?: string[];
+  cons?: string[];
+  verdict?: string;
+  specs?: Record<string, string>;
+  ctaText?: string;
+  ctaSubtext?: string;
+  affiliate?: string;
+  tid?: string;
+  page?: string;
+  showSchema?: boolean;
+  guaranteeDays?: number;
+  originalPrice?: string;
+  currentPrice?: string;
+}
+
+const {
+  name,
+  tagline,
+  badge = '#1 Top Pick',
+  rank,
+  image,
+  imageAlt = name,
+  vendor,
+  creator,
+  rating = 4.8,
+  reviewCount = 2850,
+  pros = [],
+  cons = [],
+  verdict,
+  specs,
+  ctaText = 'Visit Official Website & Claim Discount',
+  ctaSubtext = 'Instant Access • 60-Day Money-Back Guarantee',
+  affiliate,
+  tid = 'card_cta',
+  page,
+  showSchema = false,
+  guaranteeDays = 60,
+  originalPrice,
+  currentPrice,
+} = Astro.props;
+
+const hoplink = buildClickbankUrl(vendor, { affiliate, tid, page });
+const relAttr = getAffiliateRel();
+
+// Schema.org para o produto caso habilitado
+const productSchema = showSchema ? buildProductSchema({
+  name,
+  description: verdict || tagline || name,
+  image,
+  vendor,
+  rating,
+  reviewCount,
+  brand: creator,
+}) : null;
+---
+
+<article 
+  class="bg-white rounded-3xl border border-slate-200/90 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden my-10"
+  id={`product-${vendor}`}
+>
+  {showSchema && (
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify(productSchema)}
+    />
+  )}
+
+  <!-- Cabeçalho do Card com Badges e Criador -->
+  <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5">
+      {rank && (
+        <span class="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center">
+          #{rank}
+        </span>
+      )}
+      {badge && (
+        <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/70 px-3 py-1 rounded-full border border-emerald-500/30">
+          {badge}
+        </span>
+      )}
+    </div>
+
+    {creator && (
+      <span class="text-xs text-slate-300 font-medium">
+        Creator: <strong class="text-white font-semibold">{creator}</strong>
+      </span>
+    )}
+  </div>
+
+  <div class="p-6 sm:p-8">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+      <!-- Imagem do Produto e Selo de Confiança -->
+      <div class="md:col-span-5 flex flex-col items-center">
+        <a 
+          href={hoplink} 
+          target="_blank" 
+          rel={relAttr}
+          class="block relative group w-full max-w-[300px] aspect-4/3 rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 p-4 flex items-center justify-center hover:opacity-95 transition-all shadow-inner"
+        >
+          <img 
+            src={image} 
+            alt={imageAlt}
+            loading="lazy"
+            decoding="async"
+            width="320"
+            height="240"
+            class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform duration-300"
+          />
+        </a>
+
+        <!-- Nota de Avaliação -->
+        <div class="mt-4 flex items-center gap-2 text-sm text-slate-600">
+          <div class="flex text-amber-400" aria-label={`Rating: ${rating} out of 5 stars`}>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <svg 
+                class={`w-4 h-4 ${i < Math.floor(rating) ? 'fill-amber-400' : 'fill-slate-200'}`} 
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+            ))}
+          </div>
+          <span class="font-black text-slate-900">{rating.toFixed(1)}</span>
+          <span class="text-xs text-slate-500">({reviewCount.toLocaleString()} verified reviews)</span>
+        </div>
+
+        <!-- Garantia ClickBank no Card -->
+        <div class="mt-3 inline-flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200 font-semibold">
+          <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <span>{guaranteeDays}-Day Money-Back Guarantee</span>
+        </div>
+      </div>
+
+      <!-- Detalhes do Produto & Copywriting -->
+      <div class="md:col-span-7 flex flex-col justify-between h-full">
+        <div>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-950 leading-tight">
+            <a 
+              href={hoplink} 
+              target="_blank" 
+              rel={relAttr}
+              class="hover:text-emerald-700 transition-colors"
+            >
+              {name}
+            </a>
+          </h3>
+
+          {tagline && (
+            <p class="text-sm font-semibold text-emerald-800 mt-1.5">
+              {tagline}
+            </p>
+          )}
+
+          {verdict && (
+            <p class="mt-4 text-slate-700 text-sm sm:text-base leading-relaxed">
+              {verdict}
+            </p>
+          )}
+
+          <!-- Especificações Chave -->
+          {specs && (
+            <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+              {Object.entries(specs).map(([label, value]) => (
+                <div>
+                  <span class="text-slate-500 block font-normal text-[11px] uppercase tracking-wide">{label}</span>
+                  <span class="text-slate-900 font-bold">{value}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <!-- Prós e Contras -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-5 border-t border-slate-100">
+            {pros.length > 0 && (
+              <div class="bg-emerald-50/60 rounded-2xl p-4 border border-emerald-100">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5 mb-2.5">
+                  <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
+                  What Makes It Great
+                </span>
+                <ul class="text-xs text-slate-700 space-y-2">
+                  {pros.map((pro) => (
+                    <li class="flex items-start gap-1.5">
+                      <span class="text-emerald-600 font-bold shrink-0">✓</span>
+                      <span>{pro}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {cons.length > 0 && (
+              <div class="bg-amber-50/60 rounded-2xl p-4 border border-amber-200/80">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5 mb-2.5">
+                  <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  Consider Before Buying
+                </span>
+                <ul class="text-xs text-slate-700 space-y-2">
+                  {cons.map((con) => (
+                    <li class="flex items-start gap-1.5">
+                      <span class="text-amber-600 font-bold shrink-0">•</span>
+                      <span>{con}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Botão CTA de Alta Conversão ClickBank -->
+        <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div class="text-center sm:text-left">
+            {(originalPrice || currentPrice) && (
+              <div class="flex items-baseline gap-2 justify-center sm:justify-start">
+                {originalPrice && (
+                  <span class="text-xs text-slate-400 line-through font-medium">{originalPrice}</span>
+                )}
+                {currentPrice && (
+                  <span class="text-lg font-black text-emerald-700">{currentPrice}</span>
+                )}
+              </div>
+            )}
+            <span class="block text-[11px] text-slate-500">{ctaSubtext}</span>
+          </div>
+
+          <a 
+            href={hoplink}
+            target="_blank"
+            rel={relAttr}
+            class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md hover:shadow-lg transition-all active:scale-98 text-center"
+          >
+            <span>{ctaText}</span>
+            <svg class="w-4 h-4 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

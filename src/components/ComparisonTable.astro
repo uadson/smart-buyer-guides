@@ -1,0 +1,130 @@
+---
+/**
+ * Componente de Tabela Comparativa de Produtos ClickBank.
+ *
+ * Apresenta um resumo comparativo "Top Picks at a Glance" ideal para posicionamento
+ * na introdução de guias para conversão imediata de visitantes qualificados.
+ */
+import {
+  buildClickbankUrl,
+  getAffiliateRel,
+} from '../utils/affiliate';
+
+export interface ComparisonProduct {
+  rank?: number;
+  name: string;
+  badge?: string;
+  rating?: number;
+  image: string;
+  vendor: string;
+  highlight: string;
+  guaranteeDays?: number;
+  affiliate?: string;
+  tid?: string;
+}
+
+interface Props {
+  title?: string;
+  products: ComparisonProduct[];
+}
+
+const {
+  title = 'Quick Comparison: Top Recommended Programs at a Glance',
+  products = [],
+} = Astro.props;
+
+const relAttr = getAffiliateRel();
+---
+
+<div class="my-10 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xs">
+  {title && (
+    <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white px-6 py-4 flex items-center justify-between">
+      <h3 class="font-extrabold text-sm sm:text-base flex items-center gap-2">
+        <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {title}
+      </h3>
+      <span class="text-xs text-emerald-400 font-semibold bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-500/30 hidden sm:inline">
+        Verified 2026 Rankings
+      </span>
+    </div>
+  )}
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-xs sm:text-sm text-slate-700">
+      <thead class="bg-slate-50 text-slate-500 uppercase text-[11px] tracking-wider border-b border-slate-200 font-bold">
+        <tr>
+          <th scope="col" class="py-3.5 px-4 sm:px-6">Program / Solution</th>
+          <th scope="col" class="py-3.5 px-4">Award</th>
+          <th scope="col" class="py-3.5 px-4">Key Advantage</th>
+          <th scope="col" class="py-3.5 px-4 text-center">Score</th>
+          <th scope="col" class="py-3.5 px-4 text-center">Guarantee</th>
+          <th scope="col" class="py-3.5 px-4 sm:px-6 text-right">Official Link</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        {products.map((item) => {
+          const url = buildClickbankUrl(item.vendor, {
+            affiliate: item.affiliate,
+            tid: item.tid || 'comparison_table',
+          });
+          return (
+            <tr class="hover:bg-emerald-50/20 transition-colors">
+              <td class="py-4 px-4 sm:px-6">
+                <a 
+                  href={url} 
+                  target="_blank" 
+                  rel={relAttr}
+                  class="flex items-center gap-3.5 font-bold text-slate-900 hover:text-emerald-700 transition-colors"
+                >
+                  <img 
+                    src={item.image} 
+                    alt={item.name}
+                    class="w-12 h-12 object-contain rounded-xl border border-slate-100 bg-white p-1 shrink-0 shadow-2xs"
+                    loading="lazy"
+                  />
+                  <span class="line-clamp-2 max-w-[180px] sm:max-w-xs">{item.name}</span>
+                </a>
+              </td>
+              <td class="py-4 px-4 whitespace-nowrap">
+                {item.badge ? (
+                  <span class="inline-block px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-bold">
+                    {item.badge}
+                  </span>
+                ) : (
+                  <span class="text-slate-400">—</span>
+                )}
+              </td>
+              <td class="py-4 px-4 text-slate-600 text-xs max-w-xs">
+                {item.highlight}
+              </td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="font-extrabold text-slate-900">{item.rating?.toFixed(1) || '4.9'}</span>
+                <span class="text-amber-500 ml-0.5">★</span>
+              </td>
+              <td class="py-4 px-4 text-center whitespace-nowrap">
+                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                  {item.guaranteeDays || 60} Days
+                </span>
+              </td>
+              <td class="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
+                <a 
+                  href={url} 
+                  target="_blank" 
+                  rel={relAttr}
+                  class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-2xs hover:shadow-xs transition-all"
+                >
+                  <span>Visit Site</span>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </a>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+</div>

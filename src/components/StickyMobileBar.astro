@@ -1,0 +1,54 @@
+---
+/**
+ * Componente de Barra Flutuante Mobile de Alta Conversão.
+ *
+ * Fixa no rodapé em dispositivos móveis permitindo que o leitor acesse a oferta oficial
+ * com 1 clique a qualquer momento da leitura.
+ */
+import {
+  buildClickbankUrl,
+  getAffiliateRel,
+} from '../utils/affiliate';
+
+interface Props {
+  productName: string;
+  vendor: string;
+  ctaText?: string;
+  affiliate?: string;
+  tid?: string;
+  guaranteeDays?: number;
+}
+
+const {
+  productName,
+  vendor,
+  ctaText = 'Claim 60-Day Risk-Free',
+  affiliate,
+  tid = 'mobile_sticky',
+  guaranteeDays = 60,
+} = Astro.props;
+
+const hoplink = buildClickbankUrl(vendor, { affiliate, tid });
+const relAttr = getAffiliateRel();
+---
+
+<aside 
+  class="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-3 shadow-lg md:hidden flex items-center justify-between gap-3"
+  aria-label="Mobile Sticky Offer"
+>
+  <div class="min-w-0 flex-1">
+    <span class="block text-xs font-black text-slate-900 truncate">{productName}</span>
+    <span class="block text-[10px] text-emerald-700 font-bold">
+      ✓ {guaranteeDays}-Day Money-Back Guarantee
+    </span>
+  </div>
+
+  <a 
+    href={hoplink}
+    target="_blank"
+    rel={relAttr}
+    class="shrink-0 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-extrabold text-xs shadow-md active:scale-95 transition-transform"
+  >
+    {ctaText}
+  </a>
+</aside>
